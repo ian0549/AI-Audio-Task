@@ -11,6 +11,21 @@ To setup this project in your own environment, the following libraries need to b
 - Librosa
 - Numpy
 - pytest
+- setuptools
+
+Run the following commands in your project's root directory:
+1. Setup a virtual environment and select as interpreter
+
+    ```
+    $ python -m venv
+    ```
+2. Activate the virtual environment
+
+    ```
+    $ .venv\Scripts\activate
+    ```
+
+3. run pip install -r requirements.txt in your shell
 
 
 ### Instructions:
