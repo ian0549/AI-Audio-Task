@@ -1,5 +1,5 @@
 import os
-
+import sys
 import numpy as np
 import librosa
 import pickle
@@ -61,7 +61,6 @@ class Pipeline:
          super().__setattr__(name, value)    
           
 
-
      @functools.lru_cache(maxsize = None) 
      def loader(self):
 
@@ -75,6 +74,7 @@ class Pipeline:
         
         """
         audio_signals=[]
+        print(os.walk(self.dataset_path))
         path, dirs, files = next(os.walk(self.dataset_path))
 
  
@@ -217,41 +217,56 @@ def main():
 
 
 
-    if len(sys.argv) == 3:
+    if len(sys.argv) > 2:
 
         feature_type = sys.argv[1]
         dataset_dir = sys.argv[2]
         save_output_dir = sys.argv[3]
 
 
-        # setup the pipeline
+        check_data_dir_exists = os.path.exists(dataset_dir)
 
-        pipeline = Pipeline(dataset_path=dataset_dir,
-                            output_path=save_output_dir)
+        check_save_output_dir_exists = os.path.exists(save_output_dir)
 
-        loaded_signals = pipeline.loader()
+        if(check_data_dir_exists and check_save_output_dir_exists):
 
-        if loaded_signals != []:
-        
-            if feature_type == "melspectrograms":  
-                # extract mel spectrograms
-                mel_spectrogram = pipeline.extract_mel_spectrogram(loaded_signals)
-                # save the feature
-                pipeline.save_features(mel_spectrogram,feature_type)
+            # setup the pipeline
 
-            elif feature_type == "mfccs":
-                    # extract mfccs
-                    mfccs = pipeline.extract_mfccs(loaded_signals)
-                    # save the mfccs feature as numpy array
-                    pipeline.save_features(mfccs,feature_type)
+            print('.................starting pipline and extracting {} features........................'\
+                .format(feature_type))
 
+            pipeline = Pipeline(dataset_path=dataset_dir,
+                                output_path=save_output_dir)
+
+            loaded_signals = pipeline.loader()
+
+            if loaded_signals != []:
+            
+                if feature_type == "melspectrograms":  
+                    # extract mel spectrograms
+                    mel_spectrogram = pipeline.extract_mel_spectrogram(loaded_signals)
+                    # save the feature
+                    pipeline.save_features(mel_spectrogram,feature_type)
+
+                elif feature_type == "mfccs":
+                        # extract mfccs
+                        mfccs = pipeline.extract_mfccs(loaded_signals)
+                        # save the mfccs feature as numpy array
+                        pipeline.save_features(mfccs,feature_type)
+        else:
+
+            if (check_data_dir_exists== False): print("Error: data directory not found" )
+            if (check_save_output_dir_exists== False): print("Error: save output data directory not found" )
+
+            
 
     else:
 
         print(" Please set the arguments for the following:\n\
                1.  Feature type ( enter either mfccs or melspectrograms)\n\
                2.  The Absolute path for the audio dataset\n\
-               3.  The Absolute path to save the extract features")
+               3.  The Absolute path to save the extract features\n\
+               Example:  preprocessor melspectrograms \"/path/to/dataset" "/path/to/save/directory\" ")
 
 
 

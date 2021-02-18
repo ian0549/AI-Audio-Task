@@ -39,6 +39,7 @@ def test_loader(pipeline,loaded_signals):
     """
  
 
+
     expected_signal = []
     path, dirs, files = next(os.walk(pipeline["dataset_path"]))
 
@@ -136,4 +137,4 @@ def test_save_mel_spectrograms(pipeline, loaded_signals):
 
             # load array
             data = np.load(file_path)
-            assert data[i].shape[0] == pipeline["mel_bands"]
+            assert data.shape[0] == pipeline["mel_bands"]

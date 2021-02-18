@@ -10,7 +10,7 @@ setup(name='preprocessor',
       packages=find_packages(exclude=['tests*', 'testing*']),
       entry_points={
             'console_scripts': [
-                  'preprocessor = bin.preprocessor.Preprocessor.main:main',
+                  'preprocessor = preprocessor.Preprocessor:main',
             ]
       },
       zip_safe=False)
