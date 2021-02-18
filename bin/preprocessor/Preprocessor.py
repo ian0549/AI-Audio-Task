@@ -58,7 +58,7 @@ class Pipeline:
 
 
      def __setattr__(self, name, value):
-         super().__setattr__(self, name, value)    
+         super().__setattr__(name, value)    
           
 
 
@@ -82,7 +82,7 @@ class Pipeline:
         for f in files:
 
            # check if file is a wav and load
-           _, extention = os.path.splitext(file)
+           _, extention = os.path.splitext(f)
     
            if extention in ['.wav']:
 
