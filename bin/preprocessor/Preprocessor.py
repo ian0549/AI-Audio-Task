@@ -20,7 +20,7 @@ class Pipeline:
      Attributes:
         dataset_path (string) representing the path for the dataset
         output_path (string)  representing the path to save all the mfccs or melspect features
-        feature_type (string) representing the type of features to extract from the audio dataset. Either MFCCs or Mel-Spectrograms
+        sample_rate (int) representing the sample rate to use in preprocessing the audio files
         mel_bands (int) representing the range of frequencies that are relevant
         n_mfcc (int)
         n_fft (int) this representing the interval of the number of sample to consider for the fourier transform
@@ -42,9 +42,7 @@ class Pipeline:
                 hop_length=512):
                 
 
-
-
-            # initialize attritubes
+            # init attritubes
 
             self.dataset_path=dataset_path
             self.output_path=output_path
@@ -104,6 +102,7 @@ class Pipeline:
 
         for signal in loaded_signals:
 
+            # extract mfccs
             mfcc = librosa.feature.mfcc(signal,
                                          sr=self.sample_rate,
                                           S=None, 
@@ -120,7 +119,7 @@ class Pipeline:
         """Function to extract mel spectrograms from loaded audio files using librosa.
             
             Args: 
-                loaded_signals (float): list of signals for each audio file
+                loaded_signals (arrya list): list of signals for each audio file
             
             Returns: 
                 features ( arrays list): list of mel spectrograms extracted from audio signal
