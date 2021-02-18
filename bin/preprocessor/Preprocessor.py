@@ -22,10 +22,10 @@ class Pipeline:
         output_path (string)  representing the path to save all the mfccs or melspect features
         sample_rate (int) representing the sample rate to use in preprocessing the audio files
         mel_bands (int) representing the range of frequencies that are relevant
-        n_mfcc (int)
+        n_mfcc (int) number of MFCCs to return
         n_fft (int) this representing the interval of the number of sample to consider for the fourier transform
-        hop_length (int)
-        num_segments (int)
+        hop_length (int) The number of samples between successive frames
+
         
 
 
