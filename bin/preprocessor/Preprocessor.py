@@ -55,6 +55,10 @@ class Pipeline:
 
      def __getitem__(self,key):
         return getattr(self,key)
+
+
+     def __setattr__(self, name, value):
+         super().__setattr__(self, name, value)    
           
 
 
@@ -73,12 +77,21 @@ class Pipeline:
         audio_signals=[]
         path, dirs, files = next(os.walk(self.dataset_path))
 
+ 
+
         for f in files:
 
-            file_path = os.path.join(path, f)
+           # check if file is a wav and load
+           _, extention = os.path.splitext(file)
+    
+           if extention in ['.wav']:
 
-            signal, _ = librosa.load(file_path, sr=self.sample_rate)
-            audio_signals.append(signal)
+                file_path = os.path.join(path, f)
+
+                signal, _ = librosa.load(file_path, sr=self.sample_rate)
+                audio_signals.append(signal)
+           else:
+               print("Error: cannot load file type. Please ensure that your file is a wav.")
 
 
         return  audio_signals   
@@ -201,11 +214,55 @@ class Pipeline:
 
 
 def main():
-    # if len(sys.argv) == 3:
-
-    # else:
 
 
 
- if __name__ == '__main__':
+    if len(sys.argv) == 3:
+
+        feature_type = sys.argv[1]
+        dataset_dir = sys.argv[2]
+        save_output_dir = sys.argv[3]
+
+
+        # setup the pipeline
+
+        pipeline = Pipeline(dataset_path=dataset_dir,
+                            output_path=save_output_dir)
+
+        loaded_signals = pipeline.loader()
+
+        if loaded_signals != []:
+        
+            if feature_type == "melspectrograms":  
+                # extract mel spectrograms
+                mel_spectrogram = pipeline.extract_mel_spectrogram(loaded_signals)
+                # save the feature
+                pipeline.save_features(mel_spectrogram,feature_type)
+
+            elif feature_type == "mfccs":
+                    # extract mfccs
+                    mfccs = pipeline.extract_mfccs(loaded_signals)
+                    # save the mfccs feature as numpy array
+                    pipeline.save_features(mfccs,feature_type)
+
+
+    else:
+
+        print(" Please set the arguments for the following:\n\
+               1.  Feature type ( enter either mfccs or melspectrograms)\n\
+               2.  The Absolute path for the audio dataset\n\
+               3.  The Absolute path to save the extract features")
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
     main()      

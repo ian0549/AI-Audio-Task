@@ -53,6 +53,7 @@ def test_loader(pipeline,loaded_signals):
 
     actual_signal = loaded_signals
 
+    assert actual_signal != []
     for i in range(file_count):
         assert np.allclose(actual_signal[i], expected_signal[i])
 
