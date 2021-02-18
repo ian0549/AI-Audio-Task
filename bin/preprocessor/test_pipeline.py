@@ -1,19 +1,20 @@
 import os
 
-from preprocessor.Preprocessor import Pipeline
 
+from  preprocessor.Preprocessor import Pipeline
 import pytest
 import numpy as np
 import librosa
+
 
 @pytest.fixture(scope='module')
 def pipeline():
     print('------------------setup-------------------')
 
 
-
-    pipeline = Pipeline(dataset_path='music_dataset',
-                        output_path='output',
+    # Remember to replace the dataset path and the output path with your own directory
+    pipeline = Pipeline(dataset_path='C:\\Users\IAN CECIL AKOTO\Desktop\Interview Project Test\AI-Audio-Task\music_dataset',
+                        output_path='C:\\Users\IAN CECIL AKOTO\Desktop\Interview Project Test\AI-Audio-Task\output',
                         sample_rate=22050,
                         mel_bands=10,
                         n_mfcc=10,

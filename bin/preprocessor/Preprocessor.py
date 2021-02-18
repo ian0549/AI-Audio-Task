@@ -60,8 +60,7 @@ class Pipeline:
      def __setattr__(self, name, value):
          super().__setattr__(name, value)    
           
-
-     @functools.lru_cache(maxsize = None) 
+     @functools.lru_cache(maxsize = None)
      def loader(self):
 
         """Function to load audio files from dataset using librosa.
@@ -73,28 +72,33 @@ class Pipeline:
                 signal (float): list of signals for each audio file
         
         """
-        audio_signals=[]
-        print(os.walk(self.dataset_path))
-        path, dirs, files = next(os.walk(self.dataset_path))
+
+        try:
+            audio_signals=[]
+            path, dirs, files = next(os.walk(self.dataset_path))
+
+            
+            for f in files:
+
+                # check if file is a wav and load
+                _, extention = os.path.splitext(f)
+            
+                if extention in ['.wav']:
+
+                        file_path = os.path.join(path, f)
+
+                        signal, _ = librosa.load(file_path, sr=self.sample_rate)
+                        audio_signals.append(signal)
+                else:
+                    print("Error: cannot load file type. Please ensure that your file is a wav.")
+
+
+            return  audio_signals   
 
  
-
-        for f in files:
-
-           # check if file is a wav and load
-           _, extention = os.path.splitext(f)
-    
-           if extention in ['.wav']:
-
-                file_path = os.path.join(path, f)
-
-                signal, _ = librosa.load(file_path, sr=self.sample_rate)
-                audio_signals.append(signal)
-           else:
-               print("Error: cannot load file type. Please ensure that your file is a wav.")
-
-
-        return  audio_signals   
+        except StopIteration:
+            print("No more suggesstions.")
+       
 
 
 
